@@ -7,11 +7,13 @@ import br.com.sistematemporeal.persistencia.jdbc.FuncionariosDAO;
 
 public class TestFuncionariosDAO {
 	public static void main(String [] args){
-		//cadastro();
+		cadastro();
 		//altera();
 		//exclui();
 		//buscaId();
 		//buscarTodos();
+		//autentica();
+		
 	
 	}
 	
@@ -78,6 +80,16 @@ public class TestFuncionariosDAO {
 		for(Funcionarios f: listaFC){
 			System.out.println(f);
 		}
+	}
+	
+	public static void autentica(){
+		FuncionariosDAO fcDAO = new FuncionariosDAO();
+		Funcionarios fun = new Funcionarios();
+		fun.setLogin("luiz");
+		fun.setSenha("12345");
+		Funcionarios funRetorno = fcDAO.autenticar(fun);
+		System.out.println(funRetorno);
+		
 	}
 	
 	

@@ -17,6 +17,7 @@ public class TestEventosDAO {
 		//exclui();
 		//buscaId();
 		//buscarTodos();
+		//saida();
 		
 		
 
@@ -30,7 +31,7 @@ public class TestEventosDAO {
 	
 		
 		Eventos evt = new Eventos();
-		evt.setEntrada(1);
+		evt.setEntrada(2);
 		evt.setSaida(0);
 		evt.setId_sensor(1);
 		evt.setValor("400");
@@ -60,10 +61,26 @@ public class TestEventosDAO {
 		evt.setValor("400");
 		evt.setHora_inicio(hora_inicio);
 		evt.setHora_fim(hora_fim);
-		evt.setData(data);
+		evt.setData_inicio(data);
 		
 		EventosDAO evtDAO = new EventosDAO();
 		evtDAO.alterar(evt);
+		
+		System.out.println("Alterado com sucesso.");
+		
+	}
+	
+	
+	public static void saida(){
+
+		
+		Eventos evt = new Eventos();
+		evt.setId(2);
+		evt.setSaida(1);
+
+		
+		EventosDAO evtDAO = new EventosDAO();
+		evtDAO.registraSaida(evt);
 		
 		System.out.println("Alterado com sucesso.");
 		
