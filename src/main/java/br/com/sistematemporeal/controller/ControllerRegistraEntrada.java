@@ -40,7 +40,7 @@ public class ControllerRegistraEntrada extends HttpServlet {
 
 		Integer id_sensor = Integer.parseInt(req.getParameter("id_sensor"));
 
-		valorquarto5 = "200";
+		
 
 		Eventos evt = new Eventos();
 		evt.setEntrada(1);

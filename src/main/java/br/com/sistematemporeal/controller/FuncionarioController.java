@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.sistematemporeal.persistencia.entidades.Funcionarios;
 import br.com.sistematemporeal.persistencia.jdbc.FuncionariosDAO;
 
-//http://localhost:8080/tfg_projeto/funcontroller.do?nome=ze&senha=123&login=zezao
+
 @WebServlet("/funcontroller.do")
 public class FuncionarioController extends HttpServlet {
 

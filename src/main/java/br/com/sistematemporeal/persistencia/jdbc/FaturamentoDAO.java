@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,17 +23,50 @@ public class FaturamentoDAO {
 	 * @param Recebe
 	 *            como parametro um objeto do tipo faturamento que sera inserido
 	 *            no banco de dados
+	 * @return 
 	 */
-	public void cadastrar(Faturamento fat) {
-
-		String sql = "insert into faturamento (cpf_funcionario, data, estado, valor_informado) values (?, CURRENT_DATE, ?, ?)";
-
-		try (PreparedStatement preparador = con.prepareStatement(sql)) {
+	public int cadastrar(Faturamento fat) {
+		ResultSet rsID = null;
+		String sql = "insert into faturamento (cpf_funcionario, data, estado, valor_informado, data_inicio, hora_inicio, hora) values (?, CURRENT_DATE, ?, ?, ?, ?, LOCALTIME(0))";
+		int id=0;
+		try (PreparedStatement preparador = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			preparador.setInt(1, fat.getCpf_funcionario());
-			// preparador.setDate(2, fat.getData());
 			preparador.setString(2, fat.getEstado());
 			preparador.setString(3, fat.getValor_informado());
+			preparador.setDate(4, fat.getData_inicio());
+			preparador.setTime(5, fat.getHora_inicio());
 			
+			// Executando comando SQL
+			preparador.executeUpdate();
+			
+			rsID = preparador.getGeneratedKeys();  
+			  
+			if(rsID.next())
+				id=rsID.getInt("id");
+				
+			
+			
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return id;
+		
+		
+		
+
+	}
+	
+	public void insereSoma(Faturamento fat) {
+		String sql = "update faturamento set total_eventos=?, estado=? where id=?";
+
+		try (PreparedStatement preparador = con.prepareStatement(sql)) {
+			preparador.setInt(1, fat.getTotal_eventos());
+			preparador.setString(2, fat.getEstado());
+			preparador.setInt(3, fat.getId());
 			// Executando comando SQL
 			preparador.execute();
 
@@ -42,6 +76,9 @@ public class FaturamentoDAO {
 		}
 
 	}
+	
+	
+
 
 	/**
 	 * 
@@ -116,6 +153,7 @@ public class FaturamentoDAO {
 				ft.setEstado(resultado.getString("estado"));
 				ft.setValor_informado(resultado.getString("valor_informado"));
 				ft.setId(resultado.getInt("id"));
+				ft.setHora(resultado.getTime("hora"));
 				return ft;
 
 			}

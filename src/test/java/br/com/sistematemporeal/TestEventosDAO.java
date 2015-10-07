@@ -1,6 +1,9 @@
 package br.com.sistematemporeal;
 
 import java.sql.Date;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -18,6 +21,7 @@ public class TestEventosDAO {
 		//buscaId();
 		//buscarTodos();
 		//saida();
+		pegaEventos();
 		
 		
 
@@ -46,10 +50,78 @@ public class TestEventosDAO {
 		
 	}
 	
+	public static void pegaEventos(){
+		String dataI="2015-10-01";
+		String dataF="2015-10-06";
+		String horaI = "10:47:00";
+		String horaF = "21:57:59";
+		SimpleDateFormat formatadorH = new SimpleDateFormat("HH:mm:ss");
+		java.util.Date horaDB = null;
+		try {
+			horaDB = formatadorH.parse(horaI);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Time timeDB = new Time(horaDB.getTime());
+		
+		SimpleDateFormat formatadorH1 = new SimpleDateFormat("HH:mm:ss");
+		java.util.Date horaDB1 = null;
+		try {
+			horaDB1 = formatadorH1.parse(horaF);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Time timeDB1 = new Time(horaDB1.getTime());
+		
+		//dataI = new SimpleDateFormat("yyyy-MM-dd").format(date);
+		//DateFormat formatter2 = new SimpleDateFormat("yyyy/MM/dd");
+		
+	    java.sql.Date datec = null;  
+        try {  
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+            datec = new java.sql.Date( ((java.util.Date)format.parse(dataI)).getTime() );  
+        } catch (ParseException e) {              
+            try {
+				throw e;
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}  
+        } 
+        
+	    java.sql.Date datec1 = null;  
+        try {  
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+            datec1 = new java.sql.Date( ((java.util.Date)format.parse(dataF)).getTime() );  
+        } catch (ParseException e) {              
+            try {
+				throw e;
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}  
+        }  
+        //System.out.println(timeDB);
+       // System.out.println(timeDB1);
+		
+		EventosDAO evtDAO = new EventosDAO();
+		List<Eventos> listaEVT =evtDAO.totalEventos(datec, datec1, timeDB, timeDB1, 2);
+		for(Eventos e: listaEVT){
+			System.out.println(e);
+		}
+		
+		
+		
+		
+		
+	}
+	
 	public static void altera(){
 		//SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		Date hora_fim = null;
-		Date hora_inicio = null;
+		Time hora_fim = null;
+		Time hora_inicio = null;
 		Date data = null;
 	
 		

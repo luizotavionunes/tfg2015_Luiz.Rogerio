@@ -38,17 +38,18 @@ public class LoginController extends HttpServlet {
 		
 		
 		Funcionarios funAUT = funDAO.autenticar(fun);
-		fun.setAcesso(funAUT.getAcesso());
-		fun.setCpf(funAUT.getCpf());
+		//fun.setAcesso(funAUT.getAcesso());
+		//fun.setCpf(funAUT.getCpf());
 		//System.out.println(acesso);
+		//System.out.println(funAUT.getAcesso());
 		
 		if(funAUT != null){
 			HttpSession sessao = req.getSession();
-			if(fun.getAcesso()==1){
+			if(funAUT.getAcesso()==1){
 				sessao.setAttribute("funAUT", funAUT);
 				sessao.setMaxInactiveInterval(60*5);
 				req.getRequestDispatcher("WEB-INF/menufunc.jsp").forward(req, resp);
-			} else if(fun.getAcesso()==2){
+			} else if(funAUT.getAcesso()==2){
 				sessao.setAttribute("admAUT", funAUT);
 				sessao.setMaxInactiveInterval(60*5);
 				req.getRequestDispatcher("WEB-INF/menuadm.jsp").forward(req, resp);

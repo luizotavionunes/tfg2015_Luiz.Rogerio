@@ -1,6 +1,7 @@
 package br.com.sistematemporeal.persistencia.entidades;
 
 import java.sql.Date;
+import java.sql.Time;
 
 public class Eventos {
 	private Integer id;
@@ -9,9 +10,13 @@ public class Eventos {
 	private Integer id_sensor;
 	private Integer entrada;
 	private Integer saida;
-	private Date hora_inicio; // time no sql
-	private Date hora_fim; // time no sql
+	private Time hora_inicio; // time no sql
+	private Time hora_fim; // time no sql
 	private Date data_fim;
+	private Integer id_fat;
+	private Integer valor_total;
+	private Date tempo_i;
+	private Date tempo_f;
 
 	public Integer getId() {
 		return id;
@@ -61,19 +66,19 @@ public class Eventos {
 		this.saida = saida;
 	}
 
-	public Date getHora_inicio() {
+	public Time getHora_inicio() {
 		return hora_inicio;
 	}
 
-	public void setHora_inicio(Date hora_inicio) {
+	public void setHora_inicio(Time hora_inicio) {
 		this.hora_inicio = hora_inicio;
 	}
 
-	public Date getHora_fim() {
+	public Time getHora_fim() {
 		return hora_fim;
 	}
 
-	public void setHora_fim(Date hora_fim) {
+	public void setHora_fim(Time hora_fim) {
 		this.hora_fim = hora_fim;
 	}
 
@@ -85,11 +90,51 @@ public class Eventos {
 		this.data_fim = data_fim;
 	}
 
+	public Integer getId_fat() {
+		return id_fat;
+	}
+
+	public void setId_fat(Integer id_fat) {
+		this.id_fat = id_fat;
+	}
+
+	public Integer getValor_total() {
+		return valor_total;
+	}
+
+	public void setValor_total(Integer valor_total) {
+		this.valor_total = valor_total;
+	}
+
+	public Date getTempo_i() {
+		return tempo_i;
+	}
+
+	public void setTempo_i(Date tempo_i) {
+		this.tempo_i = tempo_i;
+	}
+
+	public Date getTempo_f() {
+		return tempo_f;
+	}
+
+	public void setTempo_f(Date tempo_f) {
+		this.tempo_f = tempo_f;
+	}
+
 	@Override
 	public String toString() {
 		return "Eventos [id=" + id + ", valor=" + valor + ", data_inicio=" + data_inicio + ", id_sensor=" + id_sensor
 				+ ", entrada=" + entrada + ", saida=" + saida + ", hora_inicio=" + hora_inicio + ", hora_fim="
-				+ hora_fim + ", data_fim=" + data_fim + "]";
+				+ hora_fim + ", data_fim=" + data_fim + ", id_fat=" + id_fat + ", valor_total=" + valor_total
+				+ ", tempo_i=" + tempo_i + ", tempo_f=" + tempo_f + "]";
 	}
+
+
+	
+	
+
+
+
 
 }
