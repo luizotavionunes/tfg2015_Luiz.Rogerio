@@ -127,8 +127,15 @@ public class Eventos {
 		return "Eventos [id=" + id + ", valor=" + valor + ", data_inicio=" + data_inicio + ", id_sensor=" + id_sensor
 				+ ", entrada=" + entrada + ", saida=" + saida + ", hora_inicio=" + hora_inicio + ", hora_fim="
 				+ hora_fim + ", data_fim=" + data_fim + ", id_fat=" + id_fat + ", valor_total=" + valor_total
-				+ ", tempo_i=" + tempo_i + ", tempo_f=" + tempo_f + "]";
+				+ ", tempo_i=" + tempo_i + ", tempo_f=" + tempo_f + ", getId()=" + getId() + ", getValor()="
+				+ getValor() + ", getData_inicio()=" + getData_inicio() + ", getId_sensor()=" + getId_sensor()
+				+ ", getEntrada()=" + getEntrada() + ", getSaida()=" + getSaida() + ", getHora_inicio()="
+				+ getHora_inicio() + ", getHora_fim()=" + getHora_fim() + ", getData_fim()=" + getData_fim()
+				+ ", getId_fat()=" + getId_fat() + ", getValor_total()=" + getValor_total() + ", getTempo_i()="
+				+ getTempo_i() + ", getTempo_f()=" + getTempo_f() + ", getClass()=" + getClass() + ", hashCode()="
+				+ hashCode() + ", toString()=" + super.toString() + "]";
 	}
+
 
 
 	

@@ -125,6 +125,34 @@ public class EventosDAO {
 		// Integer valor = evt.getHora_fim()-evt.getHora_inicio();
 
 	}
+	
+	
+	public int fechaEventoAux(int id_sensor){
+		int id=0;
+		
+		String sql = "Select * from eventos where id_sensor=? AND saida=0";
+
+		try (PreparedStatement preparador = con.prepareStatement(sql)) {
+			preparador.setInt(1, id_sensor);
+		
+			ResultSet resultado = preparador.executeQuery();
+			// Posicionando cursor no primeiro registro
+			if (resultado.next()) {
+				Eventos ev = new Eventos();
+				ev.setId(resultado.getInt("id"));
+				
+				id=ev.getId();
+
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return id;
+	}
 
 	/**
 	 * Faz a alteração de um registro da tabela eventos
@@ -132,7 +160,7 @@ public class EventosDAO {
 	 * @param Recebe
 	 *            como parametro um objeto do tipo Eventos associado ao id que
 	 *            se deseja alterar
-	 */
+	 *//*
 	public void alterar(Eventos evt) {
 		String sql = "update eventos set entrada=?, saida=?, id_sensor=?, valor=?, hora_inicio=?, hora_fim=?, data_inicio=?, data_fim=? where id=?";
 
@@ -154,7 +182,7 @@ public class EventosDAO {
 			e.printStackTrace();
 		}
 
-	}
+	}*/
 
 	/**
 	 * Faz a exclusao de um registro da tabela eventos
@@ -177,21 +205,53 @@ public class EventosDAO {
 		}
 
 	}
+	
+	// Falta implementar
+	public void excluirEvtFat(Eventos evt) {
+		String sql = "delete from eventos where id=?";
+
+		try (PreparedStatement preparador = con.prepareStatement(sql)) {
+			preparador.setInt(1, evt.getId());
+			// Executando comando SQL
+			preparador.execute();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 	public List<Eventos> totalEventos(Date dataI, Date dataF, Time horaI, Time horaF, Integer id_fat) {
 		// AND hora_inicio>=? AND hora_fim<=?
-		String sql = "Select * from eventos where data_fim<=? AND data_fim>=? AND hora_fim<=? AND hora_fim>=?";
-		String sql2 = "update eventos set fat_id=? where data_fim<=? AND data_fim>=? AND hora_fim<=? AND hora_fim>=?";
+		//String sql = "Select * from eventos where data_fim<=? AND data_fim>=? AND hora_fim<=? AND hora_fim>=?";
+		String sql = "Select * from eventos where tempo_f>=(?|| ' ' ||?)::timestamp AND tempo_f<=(?|| ' ' ||?)::timestamp"; 
+		String sql2 = "update eventos set fat_id=? where tempo_f>(?|| ' ' ||?)::timestamp AND tempo_f<=(?|| ' ' ||?)::timestamp";
+		//String sql = "Select * from eventos where ((data_inicio=? || ' ' || hora_inicio=?)::timestamp)>=tempo_f AND ((data_fim=?||hora_fim=?)::timestamp)<=tempo_f";
+		//String sql2 = "update eventos set fat_id=? where ((data_inicio=?||hora_inicio=?)::timestamp)>=tempo_f AND ((data_fim=?||hora_fim=?)::timestamp)<=tempo_f";
+		
+	//String sql2 = "update eventos set fat_id=? where data_fim<=? AND data_fim>=? AND hora_fim<=? AND hora_fim>=?";
+		//String sql = "Select from eventos EXTRACT(EPOCH FROM ((data_inicio=?) + (hora_inicio=?))>=tempo_f AND EXTRACT(EPOCH FROM ((data_fim=?) + (hora_fim=?)))<=tempo_f";
+		//String sql2 = "Select from eventos where fat_id=? EXTRACT(EPOCH FROM ((data_inicio=?) + (hora_inicio=?)))>=tempo_f AND EXTRACT(EPOCH FROM ((data_fim=?) + (hora_fim=?)))<=tempo_f";
+		
 		List<Eventos> lista = new ArrayList<Eventos>();
 	
+		
 		try (PreparedStatement preparador = con.prepareStatement(sql2)) {
 			preparador.setInt(1, id_fat);
-			preparador.setDate(2, dataF);
-			preparador.setDate(3, dataI);
-			preparador.setTime(4, horaF);
-			preparador.setTime(5, horaI);
+			preparador.setString(2, dataI.toString());
+			preparador.setString(3, horaI.toString());
+			preparador.setString(4, dataF.toString());
+			preparador.setString(5, horaF.toString());
+			
+			/*preparador.setInt(1, id_fat);
+			preparador.setDate(2, dataI);
+			preparador.setTime(3, horaI);
+			preparador.setDate(4, dataF);
+			preparador.setTime(5, horaF);*/
 			preparador.execute();
-
+			
+		
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -199,11 +259,12 @@ public class EventosDAO {
 		}
 		
 		try (PreparedStatement preparador = con.prepareStatement(sql)) {
-			preparador.setDate(1, dataF);
-			preparador.setDate(2, dataI);
-			preparador.setTime(3, horaF);
-			preparador.setTime(4, horaI);
-			preparador.execute();
+			preparador.setString(1, dataI.toString());
+			preparador.setString(2, horaI.toString());
+			preparador.setString(3, dataF.toString());
+			preparador.setString(4, horaF.toString());
+			
+			//preparador.execute();
 			ResultSet resultado = preparador.executeQuery();
 			// Posicionando cursor no primeiro registro
 			while (resultado.next()) {
@@ -220,7 +281,6 @@ public class EventosDAO {
 				ev.setId_fat(resultado.getInt("fat_id"));
 				ev.setValor_total(resultado.getInt("valor_total"));
 				lista.add(ev);
-
 			}
 
 		} catch (SQLException e) {
@@ -260,6 +320,8 @@ public class EventosDAO {
 				ev.setId(resultado.getInt("id"));
 				ev.setId_sensor(resultado.getInt("id_sensor"));
 				ev.setData_fim(resultado.getDate("data_fim"));
+				ev.setId_fat(resultado.getInt("fat_id"));
+				ev.setValor_total(resultado.getInt("valor_total"));
 				lista.add(ev);
 
 			}
@@ -291,13 +353,15 @@ public class EventosDAO {
 				Eventos ev = new Eventos();
 				ev.setEntrada(resultado.getInt("entrada"));
 				ev.setSaida(resultado.getInt("saida"));
-				ev.setData_inicio(resultado.getDate("data"));
+				ev.setData_inicio(resultado.getDate("data_inicio"));
 				ev.setHora_fim(resultado.getTime("hora_fim"));
 				ev.setHora_inicio(resultado.getTime("hora_inicio"));
 				ev.setValor(resultado.getString("valor"));
 				ev.setId(resultado.getInt("id"));
 				ev.setId_sensor(resultado.getInt("id_sensor"));
 				ev.setData_fim(resultado.getDate("data_fim"));
+				ev.setId_fat(resultado.getInt("fat_id"));
+				ev.setValor_total(resultado.getInt("valor_total"));
 				return ev;
 
 			}
@@ -309,5 +373,74 @@ public class EventosDAO {
 
 		return null;
 	}
+	
+	
+	
+	public List<Eventos> buscaEvtFat(int fat_id) {
 
-}
+		String sql = "Select * from eventos where fat_id=?";
+		List<Eventos> lista = new ArrayList<Eventos>();
+		try (PreparedStatement preparador = con.prepareStatement(sql)) {
+			preparador.setInt(1, fat_id);
+			ResultSet resultado = preparador.executeQuery();
+			// Posicionando cursor no primeiro registro
+			while (resultado.next()) {
+				Eventos ev = new Eventos();
+				ev.setEntrada(resultado.getInt("entrada"));
+				ev.setSaida(resultado.getInt("saida"));
+				ev.setData_inicio(resultado.getDate("data_inicio"));
+				ev.setHora_fim(resultado.getTime("hora_fim"));
+				ev.setHora_inicio(resultado.getTime("hora_inicio"));
+				ev.setValor(resultado.getString("valor"));
+				ev.setId(resultado.getInt("id"));
+				ev.setId_sensor(resultado.getInt("id_sensor"));
+				ev.setData_fim(resultado.getDate("data_fim"));
+				ev.setId_fat(resultado.getInt("fat_id"));
+				ev.setValor_total(resultado.getInt("valor_total"));
+				lista.add(ev);
+
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return lista;
+	}
+	
+	public Eventos buscaEventosAtivos(int id_sensor){
+		
+		String sql = "Select * from eventos where saida=0 AND entrada=1";
+		Eventos ev = new Eventos();
+		try (PreparedStatement preparador = con.prepareStatement(sql)) {
+			ResultSet resultado = preparador.executeQuery();
+			// Posicionando cursor no primeiro registro
+			if(resultado.next()) {
+				ev.setEntrada(resultado.getInt("entrada"));
+				ev.setSaida(resultado.getInt("saida"));
+				ev.setData_inicio(resultado.getDate("data_inicio"));
+				ev.setHora_fim(resultado.getTime("hora_fim"));
+				ev.setHora_inicio(resultado.getTime("hora_inicio"));
+				ev.setValor(resultado.getString("valor"));
+				ev.setId(resultado.getInt("id"));
+				ev.setId_sensor(resultado.getInt("id_sensor"));
+				ev.setData_fim(resultado.getDate("data_fim"));
+				ev.setId_fat(resultado.getInt("fat_id"));
+				ev.setValor_total(resultado.getInt("valor_total"));
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return ev;
+	}
+	
+	
+		
+		
+	}
+
+

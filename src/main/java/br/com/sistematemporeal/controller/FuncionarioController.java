@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.sistematemporeal.persistencia.entidades.Funcionarios;
 import br.com.sistematemporeal.persistencia.jdbc.FuncionariosDAO;
 
-
 @WebServlet("/funcontroller.do")
 public class FuncionarioController extends HttpServlet {
 
@@ -34,23 +33,22 @@ public class FuncionarioController extends HttpServlet {
 				fun.setId(Integer.parseInt(id));
 			funDAO.excluir(fun);
 			resp.sendRedirect("funcontroller.do?acao=listar");
-			//System.out.println("Excluido com sucesso.");
+			// System.out.println("Excluido com sucesso.");
 
 		} else if (acao.equals("listar")) {
 			List<Funcionarios> lista = funDAO.buscaTodos();
-			
+
 			req.setAttribute("lista", lista);
 			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/listafun.jsp");
 			dispatcher.forward(req, resp);
-		} else if (acao.equals("alterar")){
-				String id = req.getParameter("id");
-				fun = funDAO.buscaPorId(Integer.parseInt(id));
-				req.setAttribute("func", fun);
-				RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/formfuncionario.jsp");
-				dispatcher.forward(req, resp);
-		}
-		else if (acao.equals("cadastrar")){
-			
+		} else if (acao.equals("alterar")) {
+			String id = req.getParameter("id");
+			fun = funDAO.buscaPorId(Integer.parseInt(id));
+			req.setAttribute("func", fun);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/formfuncionario.jsp");
+			dispatcher.forward(req, resp);
+		} else if (acao.equals("cadastrar")) {
+
 			fun.setId(0);
 			fun.setNome("");
 			fun.setCpf(null);
@@ -63,7 +61,7 @@ public class FuncionarioController extends HttpServlet {
 			req.setAttribute("func", fun);
 			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/formfuncionario.jsp");
 			dispatcher.forward(req, resp);
-	}
+		}
 	}
 
 	@Override
@@ -77,26 +75,25 @@ public class FuncionarioController extends HttpServlet {
 		String telefone = req.getParameter("telefone");
 		Integer cpf = Integer.parseInt(req.getParameter("cpf"));
 		Integer acesso = Integer.parseInt(req.getParameter("acesso"));
-		
-			Funcionarios fun = new Funcionarios();
-			if(id!=null)
-				fun.setId(Integer.parseInt(id));
-			fun.setNome(nome);
-			fun.setCpf(cpf);
-			fun.setAcesso(acesso);
-			fun.setEmail(email);
-			fun.setLogin(login);
-			fun.setEndereço(endereço);
-			fun.setTelefone(telefone);
-			fun.setSenha(senha);
 
-			FuncionariosDAO funDAO = new FuncionariosDAO();
-			funDAO.salvar(fun);
-			resp.sendRedirect("funcontroller.do?acao=listar");
-			//System.out.println("Cadastrado com sucesso");
+		Funcionarios fun = new Funcionarios();
+		if (id != null)
+			fun.setId(Integer.parseInt(id));
+		fun.setNome(nome);
+		fun.setCpf(cpf);
+		fun.setAcesso(acesso);
+		fun.setEmail(email);
+		fun.setLogin(login);
+		fun.setEndereço(endereço);
+		fun.setTelefone(telefone);
+		fun.setSenha(senha);
 
-			//resp.getWriter().print("Funcionário cadastrado com sucesso.");
-	
+		FuncionariosDAO funDAO = new FuncionariosDAO();
+		funDAO.salvar(fun);
+		resp.sendRedirect("funcontroller.do?acao=listar");
+		// System.out.println("Cadastrado com sucesso");
+
+		// resp.getWriter().print("Funcionário cadastrado com sucesso.");
 
 	}
 

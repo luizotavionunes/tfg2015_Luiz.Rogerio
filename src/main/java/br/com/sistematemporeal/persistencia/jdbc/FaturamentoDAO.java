@@ -153,7 +153,11 @@ public class FaturamentoDAO {
 				ft.setEstado(resultado.getString("estado"));
 				ft.setValor_informado(resultado.getString("valor_informado"));
 				ft.setId(resultado.getInt("id"));
+				ft.setHora_inicio(resultado.getTime("hora_inicio"));
+				ft.setData(resultado.getDate("data"));
 				ft.setHora(resultado.getTime("hora"));
+				ft.setData_inicio(resultado.getDate("data_inicio"));
+				ft.setTotal_eventos(resultado.getInt("total_eventos"));
 				return ft;
 
 			}
@@ -185,6 +189,11 @@ public class FaturamentoDAO {
 				ft.setEstado(resultado.getString("estado"));
 				ft.setValor_informado(resultado.getString("valor_informado"));
 				ft.setId(resultado.getInt("id"));
+				ft.setHora_inicio(resultado.getTime("hora_inicio"));
+				ft.setData(resultado.getDate("data"));
+				ft.setHora(resultado.getTime("hora"));
+				ft.setData_inicio(resultado.getDate("data_inicio"));
+				ft.setTotal_eventos(resultado.getInt("total_eventos"));
 				lista.add(ft);
 
 			}

@@ -18,7 +18,7 @@ public class TestLog_SensorDAO {
 		//buscarTodos();
 		
 	}
-	
+	/*
 	public static void cadastro(){
 		Date data = null;
 
@@ -81,6 +81,6 @@ public class TestLog_SensorDAO {
 			System.out.println(l);
 		}
 	}
-	
+	*/
 
 }

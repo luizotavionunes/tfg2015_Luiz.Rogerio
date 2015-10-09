@@ -136,7 +136,7 @@ public class TestEventosDAO {
 		evt.setData_inicio(data);
 		
 		EventosDAO evtDAO = new EventosDAO();
-		evtDAO.alterar(evt);
+		//evtDAO.alterar(evt);
 		
 		System.out.println("Alterado com sucesso.");
 		

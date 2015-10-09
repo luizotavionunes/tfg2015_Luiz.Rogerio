@@ -13,6 +13,21 @@ public class Faturamento {
 	private Time hora_inicio;
 	private Time hora;
 	private Integer total_eventos;
+	private Date tempo_i;
+	private Date tempo_f;
+	
+	public Date getTempo_i() {
+		return tempo_i;
+	}
+	public void setTempo_i(Date tempo_i) {
+		this.tempo_i = tempo_i;
+	}
+	public Date getTempo_f() {
+		return tempo_f;
+	}
+	public void setTempo_f(Date tempo_f) {
+		this.tempo_f = tempo_f;
+	}
 	public Integer getId() {
 		return id;
 	}

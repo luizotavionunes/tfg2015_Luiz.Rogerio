@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,25 +24,35 @@ public class Log_SensorDAO {
 	 *            como parametro um objeto do tipo Log_Sensor e o insere no
 	 *            banco de dados
 	 */
-	public void cadastrar(Log_Sensor log) {
+	public int cadastrarDesligamento(Log_Sensor log) {
 		// TODO Auto-generated method stub
 
-		String sql = "insert into log_sensor (cpf_funcionario, id_sensor, observacao, data) values (?, ?, ?, CURRENT_DATE)";
-
-		try (PreparedStatement preparador = con.prepareStatement(sql)) {
+		String sql = "insert into log_sensor (cpf_funcionario, id_sensor, observacao, data_inicio, hora_inicio) values (?, ?, ?, CURRENT_DATE, LOCALTIME(0))";
+		int id=0;
+		ResultSet rsID = null;
+		try (PreparedStatement preparador = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			preparador.setInt(1, log.getCpf_funcionario());
 			preparador.setInt(2, log.getId_sensor());
 			preparador.setString(3, log.getObservacao());
 			// preparador.setDate(4, log.getData());;
 			// Executando comando SQL
-			preparador.execute();
+			preparador.executeUpdate();
+			rsID = preparador.getGeneratedKeys();  
+			  
+			if(rsID.next())
+				id=rsID.getInt("id");
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return id;
 
 	}
+	
+	
+
+	
 
 	/**
 	 * 
@@ -51,17 +62,13 @@ public class Log_SensorDAO {
 	 *            como parametro um objeto do tipo Log_Sensor associado a um id
 	 *            especifico previamente criado
 	 */
-	public void alterar(Log_Sensor log) {
+	public void fecharLog(Integer id) {
 
-		String sql = "update log_sensor set cpf_funcionario=?, id_sensor=?, observacao=?, data=? where id=?";
+		String sql = "update log_sensor set data=CURRENT_DATE, hora=LOCALTIME(0) where id=?";
 
 		try (PreparedStatement preparador = con.prepareStatement(sql)) {
-			preparador.setInt(1, log.getCpf_funcionario());
-			preparador.setInt(2, log.getId_sensor());
-			preparador.setString(3, log.getObservacao());
-			preparador.setDate(4, log.getData());
-			;
-			preparador.setInt(5, log.getId());
+			preparador.setInt(1, id);
+
 			// Executando comando SQL
 			preparador.execute();
 
@@ -118,6 +125,8 @@ public class Log_SensorDAO {
 				log.setData(resultado.getDate("data"));
 				log.setId_sensor(resultado.getInt("id_sensor"));
 				log.setId(resultado.getInt("id"));
+
+				
 				return log;
 
 			}
@@ -149,6 +158,9 @@ public class Log_SensorDAO {
 				log.setData(resultado.getDate("data"));
 				log.setId_sensor(resultado.getInt("id_sensor"));
 				log.setId(resultado.getInt("id"));
+				log.setData_inicio(resultado.getDate("data_inicio"));
+				log.setHora_inicio(resultado.getTime("hora_inicio"));
+				log.setHora(resultado.getTime("hora"));
 				lista.add(log);
 
 			}
