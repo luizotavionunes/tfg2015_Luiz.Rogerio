@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import br.com.sistematemporeal.persistencia.entidades.Eventos;
 import br.com.sistematemporeal.persistencia.entidades.Funcionarios;
 import br.com.sistematemporeal.persistencia.entidades.Geral_Sensor;
 import br.com.sistematemporeal.persistencia.entidades.Log_Sensor;
+import br.com.sistematemporeal.persistencia.jdbc.EventosDAO;
 import br.com.sistematemporeal.persistencia.jdbc.Geral_SensorDAO;
 import br.com.sistematemporeal.persistencia.jdbc.Log_SensorDAO;
 
@@ -71,6 +73,11 @@ public class LogSensorController extends HttpServlet{
 			sens = sensDAO.buscaPorId(Integer.parseInt(id));
 			req.setAttribute("sens", sens);
 			sensDAO.monitor(2, Integer.parseInt(id));
+			Eventos evt = new Eventos();
+			EventosDAO evtDAO = new EventosDAO();
+			evt.setId(evtDAO.fechaEventoAux(Integer.parseInt(id)));
+			evtDAO.registraSaida(evt);
+			
 			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/formlg.jsp");
 			dispatcher.forward(req, resp);
 		}else if(acao.equals("listarlg")){

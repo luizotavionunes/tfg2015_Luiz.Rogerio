@@ -126,6 +126,7 @@ public class EventosDAO {
 
 	}
 	
+	// devolve id do evento a ser fechado
 	
 	public int fechaEventoAux(int id_sensor){
 		int id=0;
@@ -411,9 +412,10 @@ public class EventosDAO {
 	
 	public Eventos buscaEventosAtivos(int id_sensor){
 		
-		String sql = "Select * from eventos where saida=0 AND entrada=1";
+		String sql = "Select * from eventos where saida=0 AND entrada=1 AND id_sensor=?";
 		Eventos ev = new Eventos();
 		try (PreparedStatement preparador = con.prepareStatement(sql)) {
+			preparador.setInt(1, id_sensor);
 			ResultSet resultado = preparador.executeQuery();
 			// Posicionando cursor no primeiro registro
 			if(resultado.next()) {
