@@ -8,7 +8,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Lista de Funcionarios</title>
+<title>Lista de Funcionários</title>
 
 <script type="text/javascript">
 	function confirmaExclusao(id) {
@@ -27,6 +27,8 @@
 
 </head>
 <body>
+<h1> Lista de Funcionários Cadastrados </h1>
+
 	<table border="1">
 		<tr>
 			<th>ID</th>

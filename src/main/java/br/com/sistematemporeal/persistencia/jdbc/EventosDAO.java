@@ -19,14 +19,15 @@ public class EventosDAO {
 	private Connection con = ConexaoFactory.getConnection();
 
 	/**
-	 * Faz o cadastro de novos registros na tabela eventos
+	 * Faz o cadastro de novos registros na tabela eventos. É responsável por marcar
+	 * a entrada de um novo cliente
 	 * 
-	 * @param Recebe
-	 *            como parametro um objeto do tipo Eventos e o insere no banco
+	 * @param Recebe como parametro um objeto do tipo Eventos e o insere no banco
 	 *            de dados
 	 */
 	public void cadastrar(Eventos evt) {
-
+		
+		// Cria um novo registro da tabela eventos
 		String sql = "insert into eventos (entrada, saida, id_sensor, valor, hora_inicio, hora_fim, data_inicio, data_fim, tempo_i) values (?, ?, ?, ?, LOCALTIME(0), null, CURRENT_DATE, null, CURRENT_TIMESTAMP(0))";
 
 		try (PreparedStatement preparador = con.prepareStatement(sql)) {
@@ -34,100 +35,106 @@ public class EventosDAO {
 			preparador.setInt(2, evt.getSaida());
 			preparador.setInt(3, evt.getId_sensor());
 			preparador.setString(4, evt.getValor());
-			// preparador.setDate(5, evt.getHora_inicio());
-			// preparador.setDate(6, evt.getHora_fim());
-			// preparador.setDate(5, evt.getData_inicio());
-			// Executando comando SQL
 			preparador.execute();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
 	/**
-	 * Registra a saida de um cliente em um determinado registro da tabela
-	 * eventos
+	 * Registra a saida de um cliente, faz o calculo de horas de permanecia e altera
+	 * o valor_total de cada evento com base nos calculos realizados 
+	 * (Permanencia total X valor suite)
 	 * 
 	 * @param evt
 	 *            Recebe como parametro um determinado evento para alterar este
 	 *            registro
 	 */
-	public void registraSaida(Eventos evt) {
+	public void registraSaida(Integer id_sensor) {
 
-		String sql = "update eventos set saida=1, hora_fim=LOCALTIME(0), data_fim=CURRENT_DATE, tempo_f=CURRENT_TIMESTAMP(0) where id=?";
+
+		// Registrando a saida de um cliente, marcando o evento como fechado no banco de dados
+		String sql = "update eventos set saida=1, hora_fim=LOCALTIME(0), data_fim=CURRENT_DATE, tempo_f=CURRENT_TIMESTAMP(0) where id_sensor=? AND saida=0";
+		// Fazendo o calculo do tempo total que o cliente permaneceu na suite
 		String sql2 = "SELECT EXTRACT(HOUR FROM (tempo_f - tempo_i)) FROM eventos where id=?";
+		// Obtendo o valor por hora da suite em que esta sendo registrada a saida
 		String sql3 = "select valor from eventos where id=?";
+		// Registrando o valor total da estadia do cliente, como base no numero de horas e no
+		// valor da suite
 		String sql4 = "update eventos set valor_total=? where id=?";
 
 		ResultSet rsID = null;
 		int id = 0, maxH = 0, val = 0;
 		String valor = null;
 		ResultSet hora = null;
+		// Registrando a saida e obtendo o ID do evento fechado
 		try (PreparedStatement preparador = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-			preparador.setInt(1, evt.getId());
-			// preparador.setInt(2, Integer.parseInt(evt.getValor()));
-			// Integer valor = evt.getHora_fim()-evt.getHora_inicio();
-			// preparador.setInt(2, );
-			// Executando comando SQL
+			preparador.setInt(1, id_sensor);
 			preparador.executeUpdate();
 			rsID = preparador.getGeneratedKeys();
-
+			// Obtendo o id do evento fechado
 			if (rsID.next())
 				id = rsID.getInt("id");
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		// Fazendo o calculo do tempo de permanencia do cliente de acordo com o id
+		// obtido na consulta sql anterior
 		try (PreparedStatement preparador = con.prepareStatement(sql2)) {
 			preparador.setInt(1, id);
+			// Salvando a hora obtida do calculo feito na consulta sql anterior
+			// em um objeto do tipo resultset
 			hora = preparador.executeQuery();
 			if (hora.next())
+				// Armazenando o valor encontrado em uma variavel inteira
 				maxH = ((Number) hora.getObject(1)).intValue();
-			// System.out.print(val);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// Obtendo o valor por hora da suite em questão
 		try (PreparedStatement preparador = con.prepareStatement(sql3)) {
 			preparador.setInt(1, id);
+			// Armazenando oresultado em um objeto do tipo resultset
 			hora = preparador.executeQuery();
 			if (hora.next())
+				// Salvando a hora da suite em uma string
 				valor = hora.getString("valor");
-			// System.out.print(valor);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		// Fazendo o calculo das horas de permanencia X o valor da suite
 		val = (Integer.parseInt(valor)) * maxH;
 		if (val == 0)
+			// Caso o tmep ode permanencia seja menor que 1 hora,
+			// o valor total passará a ser o valor por hora da suite
 			val += (Integer.parseInt(valor));
-		// System.out.println(val);
 
+		// Inserindo no banco de dados o valor total calculado anteriormente
 		try (PreparedStatement preparador = con.prepareStatement(sql4)) {
 			preparador.setInt(1, val);
 			preparador.setInt(2, id);
 			preparador.execute();
-			// System.out.print(valor);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		// Integer valor = evt.getHora_fim()-evt.getHora_inicio();
 
 	}
 	
-	// devolve id do evento a ser fechado
-	
+
+	/**
+	 * Esta função recebe como parâmetro o id do sensor onde o evento será marcado
+	 * como fechado. Ela retorna o Id do evento que foi fechado.
+	 * @param id_sensor Recebe como parametro o numero do sensor que precisar ser fechado
+	 * @return retorna o id do evento que foi fechado
+	 *//*
 	public int fechaEventoAux(int id_sensor){
 		int id=0;
 		
@@ -153,37 +160,9 @@ public class EventosDAO {
 		
 		
 		return id;
-	}
-
-	/**
-	 * Faz a alteração de um registro da tabela eventos
-	 * 
-	 * @param Recebe
-	 *            como parametro um objeto do tipo Eventos associado ao id que
-	 *            se deseja alterar
-	 *//*
-	public void alterar(Eventos evt) {
-		String sql = "update eventos set entrada=?, saida=?, id_sensor=?, valor=?, hora_inicio=?, hora_fim=?, data_inicio=?, data_fim=? where id=?";
-
-		try (PreparedStatement preparador = con.prepareStatement(sql)) {
-			preparador.setInt(1, evt.getEntrada());
-			preparador.setInt(2, evt.getSaida());
-			preparador.setInt(3, evt.getId_sensor());
-			preparador.setString(4, evt.getValor());
-			preparador.setTime(5, evt.getHora_inicio());
-			preparador.setTime(6, evt.getHora_fim());
-			preparador.setDate(7, evt.getData_inicio());
-			preparador.setInt(8, evt.getId());
-			preparador.setDate(9, evt.getData_fim());
-			// Executando comando SQL
-			preparador.execute();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}*/
+
+
 
 	/**
 	 * Faz a exclusao de um registro da tabela eventos
@@ -208,11 +187,12 @@ public class EventosDAO {
 	}
 	
 	// Falta implementar
-	public void excluirEvtFat(Eventos evt) {
-		String sql = "delete from eventos where id=?";
+	public void excluirEvtFat(List<Eventos> evt, Integer id) {
+		String sql = "delete from eventos where fat_id=?";
 
+		for(Eventos f : evt){
 		try (PreparedStatement preparador = con.prepareStatement(sql)) {
-			preparador.setInt(1, evt.getId());
+			preparador.setInt(1, id);
 			// Executando comando SQL
 			preparador.execute();
 
@@ -220,20 +200,12 @@ public class EventosDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		}
 	}
 
 	public List<Eventos> totalEventos(Date dataI, Date dataF, Time horaI, Time horaF, Integer id_fat) {
-		// AND hora_inicio>=? AND hora_fim<=?
-		//String sql = "Select * from eventos where data_fim<=? AND data_fim>=? AND hora_fim<=? AND hora_fim>=?";
 		String sql = "Select * from eventos where tempo_f>=(?|| ' ' ||?)::timestamp AND tempo_f<=(?|| ' ' ||?)::timestamp"; 
 		String sql2 = "update eventos set fat_id=? where tempo_f>(?|| ' ' ||?)::timestamp AND tempo_f<=(?|| ' ' ||?)::timestamp";
-		//String sql = "Select * from eventos where ((data_inicio=? || ' ' || hora_inicio=?)::timestamp)>=tempo_f AND ((data_fim=?||hora_fim=?)::timestamp)<=tempo_f";
-		//String sql2 = "update eventos set fat_id=? where ((data_inicio=?||hora_inicio=?)::timestamp)>=tempo_f AND ((data_fim=?||hora_fim=?)::timestamp)<=tempo_f";
-		
-	//String sql2 = "update eventos set fat_id=? where data_fim<=? AND data_fim>=? AND hora_fim<=? AND hora_fim>=?";
-		//String sql = "Select from eventos EXTRACT(EPOCH FROM ((data_inicio=?) + (hora_inicio=?))>=tempo_f AND EXTRACT(EPOCH FROM ((data_fim=?) + (hora_fim=?)))<=tempo_f";
-		//String sql2 = "Select from eventos where fat_id=? EXTRACT(EPOCH FROM ((data_inicio=?) + (hora_inicio=?)))>=tempo_f AND EXTRACT(EPOCH FROM ((data_fim=?) + (hora_fim=?)))<=tempo_f";
 		
 		List<Eventos> lista = new ArrayList<Eventos>();
 	
@@ -244,18 +216,11 @@ public class EventosDAO {
 			preparador.setString(3, horaI.toString());
 			preparador.setString(4, dataF.toString());
 			preparador.setString(5, horaF.toString());
-			
-			/*preparador.setInt(1, id_fat);
-			preparador.setDate(2, dataI);
-			preparador.setTime(3, horaI);
-			preparador.setDate(4, dataF);
-			preparador.setTime(5, horaF);*/
 			preparador.execute();
 			
 		
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

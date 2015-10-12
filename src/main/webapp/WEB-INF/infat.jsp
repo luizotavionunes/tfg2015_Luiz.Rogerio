@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
+<title>Cadastro de Faturamento</title>
 
        <script> 
           function mascara_data(data){ 
@@ -102,6 +102,7 @@
 <body>
 
 
+<h1> Formulário para Cadastro de Faturamento </h1>
 	<form action="fatinf.do" method="post">
 		Data de entrada:   <input type="text" name="data" OnKeyUp="mascara_data(this.value)" maxlength="10"> dd/mm/aaaa<br> 
 	 	Hora de entrada: <input type="text" name="hora" OnKeyUp="mascara_hora(this.value)" maxlength="5"> hh:mm<br> 

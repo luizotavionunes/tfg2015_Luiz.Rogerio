@@ -32,8 +32,8 @@ public class GerenciaAutenticacao implements Filter {
 		String uri = httpRequest.getRequestURI();
 		HttpSession sessao = httpRequest.getSession(false);
 		
-
-		if(sessao != null || uri.lastIndexOf("login.html") != -1 || uri.lastIndexOf("logincontroller.do")!=-1){
+		// Esse if especifica oque pode passar pelo filtro sem estar logado no sistema
+		if(sessao != null || uri.lastIndexOf("login.html") != -1 || uri.lastIndexOf("logincontroller.do")!=-1 || uri.lastIndexOf("registraentrada.do")!=-1 || uri.lastIndexOf("registrasaida.do")!=-1){
 			chain.doFilter(request, response);
 		} else {
 			httpResponse.sendRedirect("login.html");

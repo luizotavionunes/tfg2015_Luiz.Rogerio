@@ -5,10 +5,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
+<title>Opções do Administrador</title>
 </head>
 <body>
-
+<h1> Opções do Administrador </h1>
 <fieldset>
 <%@include file="menu1.jsp" %>
 </fieldset>

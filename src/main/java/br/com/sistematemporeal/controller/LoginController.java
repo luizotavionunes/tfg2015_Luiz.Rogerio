@@ -17,6 +17,7 @@ public class LoginController extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// Acessando sessão, parametro false, diz que nao sera criada uma sessão caso ela nao exista
 		HttpSession sessao = req.getSession(false);
 		if(sessao != null){
 			sessao.invalidate();
@@ -50,7 +51,7 @@ public class LoginController extends HttpServlet {
 				sessao.setMaxInactiveInterval(60*5);
 				req.getRequestDispatcher("WEB-INF/menufunc.jsp").forward(req, resp);
 			} else if(funAUT.getAcesso()==2){
-				sessao.setAttribute("admAUT", funAUT);
+				sessao.setAttribute("funAUT", funAUT);
 				sessao.setMaxInactiveInterval(60*5);
 				req.getRequestDispatcher("WEB-INF/menuadm.jsp").forward(req, resp);
 				

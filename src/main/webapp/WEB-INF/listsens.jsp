@@ -8,10 +8,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
+<title>Estado dos Sensores</title>
 </head>
 <body>
-
+<h1> Estago Geral dos Sensores </h1>
 <table border="1">
 		<tr>
 			<th>ID</th>

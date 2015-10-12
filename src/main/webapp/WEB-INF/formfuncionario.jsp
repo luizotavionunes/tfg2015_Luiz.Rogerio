@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
+<title>Cadastro de Funcionários</title>
 
 
 
@@ -17,6 +17,8 @@
 	<%
 		Funcionarios fun = (Funcionarios)request.getAttribute("func");
 	%>
+
+<h1> Formulário para Cadastro de Funcionários</h1>
 
 	<form action="funcontroller.do" method="post">
 		Id: <input type="text" name="id" readonly="readonly" value="<%=fun.getId()%>"/><br/>

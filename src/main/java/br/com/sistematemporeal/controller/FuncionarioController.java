@@ -13,14 +13,24 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.sistematemporeal.persistencia.entidades.Funcionarios;
 import br.com.sistematemporeal.persistencia.jdbc.FuncionariosDAO;
 
+
+/*
+ * Este serlvet é reponsável por fazer a listagem, remoção e cadastro ou alteração
+ * de registros da tabela funcionarios do banco de dados
+ * 
+ */
 @WebServlet("/funcontroller.do")
 public class FuncionarioController extends HttpServlet {
 
+	// Construtor do método
 	public FuncionarioController() {
-		System.out.println("Construindo Objeto...");
 
 	}
 
+	
+	// O método GEt responde a requisições feitas por usuarios para listar funcionarios,
+	// remover e no caso de cadastro, o método get redireciona a pagina para um formulario
+	// onde serão inseridos os dados para cadastro
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String acao = req.getParameter("acao");
@@ -64,6 +74,9 @@ public class FuncionarioController extends HttpServlet {
 		}
 	}
 
+	
+	//O método POST é responsável por realizar o cadastro de novos funcionarios no banco
+	// de dados
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String id = req.getParameter("id");
@@ -91,10 +104,15 @@ public class FuncionarioController extends HttpServlet {
 		FuncionariosDAO funDAO = new FuncionariosDAO();
 		funDAO.salvar(fun);
 		resp.sendRedirect("funcontroller.do?acao=listar");
-		// System.out.println("Cadastrado com sucesso");
 
-		// resp.getWriter().print("Funcionário cadastrado com sucesso.");
 
+	}
+	
+	// Destrutor do método
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		super.destroy();
 	}
 
 }

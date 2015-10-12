@@ -87,7 +87,7 @@ public class FaturamentoDAO {
 	 * @param recebe
 	 *            como parametro um objeto do tipo faturamento que esta
 	 *            associado a um id que se deseja alterar
-	 */
+	 *//*
 	public void alterar(Faturamento fat) {
 		String sql = "update faturamento set cpf_funcionario=?, data=?, estado=?, valor_informado=?, data=? where id=?";
 
@@ -105,7 +105,7 @@ public class FaturamentoDAO {
 			e.printStackTrace();
 		}
 
-	}
+	}*/
 
 	/**
 	 * 

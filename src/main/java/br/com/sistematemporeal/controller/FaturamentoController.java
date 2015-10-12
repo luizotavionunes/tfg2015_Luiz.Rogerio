@@ -49,6 +49,10 @@ public class FaturamentoController extends HttpServlet {
 			if (id != null)
 				fat.setId(Integer.parseInt(id));
 			fatDAO.excluir(fat);
+			EventosDAO evtDAO = new EventosDAO();
+			// Excluindo todos os eventos relacionados ao faturamento desejado
+			List<Eventos> listaEvt = evtDAO.buscaEvtFat(Integer.parseInt(id));
+			evtDAO.excluirEvtFat(listaEvt, Integer.parseInt(id));
 			resp.sendRedirect("fatinf.do?acao=listar");
 			// Listando todos os faturamentos cadastrados no banco de dados
 		} else if (acao.equals("listar")) {
@@ -168,7 +172,8 @@ public class FaturamentoController extends HttpServlet {
 		// funcionario criado previamente
 		funAUT = (Funcionarios) sessao.getAttribute("funAUT");
 		// System.out.println(funAUT.getCpf());
-
+		
+		if(funAUT!=null){
 		// Atribuindo o valor do cpf do funcionario no faturamento que será
 		// registrado
 		fat.setCpf_funcionario(funAUT.getCpf());
@@ -229,5 +234,7 @@ public class FaturamentoController extends HttpServlet {
 		dispatcher.forward(req, resp);
 
 	}
-
+		else 
+			resp.getWriter().print("<script> window.alert('Voce não está logado no sistema!'); location.href='login.html'; </script>");
+	}
 }

@@ -80,10 +80,14 @@ public class ControllerMonitor extends HttpServlet {
 				// quais o s eventos estão ativos, ou seja, quais suites estão
 				// ocupadas
 				ev = evDAO.buscaEventosAtivos(f.getId_sensor());
+
+				
 				// Armazenando a data de entrada do cliente na respectiva suite
 				dataAux = ev.getData_inicio();
+	
 				// Armazenando a hora de entrada docliente na respectiva suite
 				horaI = ev.getHora_inicio();
+			
 				// Realizando a conversão da data, e alteração do seu formato
 				try {
 					dataI = out.format(in.parse(dataAux.toString()));

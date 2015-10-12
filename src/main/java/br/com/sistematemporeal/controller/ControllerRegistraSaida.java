@@ -59,11 +59,11 @@ public class ControllerRegistraSaida extends HttpServlet {
 		if (sensGe.getEstado() != 0 && sensGe.getMonitor() == 1) {
 			// Obtendo o id do evento que corresponde ao sensor em que se deseja
 			// registrar a saida
-			evt.setId(evtDAO.fechaEventoAux(id_sensor));
+			//evt.setId(evtDAO.fechaEventoAux(id_sensor));
 			// Registrando a saida do evento no banco de dados, com o id do
 			// evento
 			// obtido da linha anterior
-			evtDAO.registraSaida(evt);
+			evtDAO.registraSaida(id_sensor);
 			// Alterando a suite para desocupada na tabela de monitoramento de
 			// suites
 			sensGeDAO.monitor(0, id_sensor);
