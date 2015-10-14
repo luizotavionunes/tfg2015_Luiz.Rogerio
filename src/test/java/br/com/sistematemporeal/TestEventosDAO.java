@@ -21,12 +21,12 @@ public class TestEventosDAO {
 		//buscaId();
 		//buscarTodos();
 		//saida();
-		pegaEventos();
+		//pegaEventos();
 		
 		
 
 	}
-	
+	/*
 	public static void cadastro(){
 		//SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		Date hora_fim = null;
@@ -185,7 +185,7 @@ public class TestEventosDAO {
 		
 		
 		
-	}*/
+	}
 	
 	public static void buscaId(){
 		EventosDAO evtDAO = new EventosDAO();
@@ -203,5 +203,5 @@ public class TestEventosDAO {
 		}
 	}
 	
-
+*/
 }

@@ -8,6 +8,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<%@ include file="css/style.css"%>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Logs dos Sensores</title>
 
@@ -24,8 +25,22 @@
 
 </head>
 <body>
-<h1> Lista de Logs dos Sensores </h1>
-	<table border="1">
+		<%
+			List<Log_Sensor> lista = (List<Log_Sensor>) request.getAttribute("listlg");
+		%>
+
+	<div id="footer">
+		<h1>SISTEMA DE MONITORAMENTO EM TEMPO REAL</h1>
+	</div>
+
+	<div id="nav">
+		<%@include file="menua.jsp"%>
+	</div>
+
+	<div id="section">
+		<h2>Lista de Funcionários Cadastrados no Sistema</h2>
+		<p>
+			<table border="1">
 		<tr>
 			<th>ID</th>
 			<th>CPF FUNCIONÁRIO</th>
@@ -37,9 +52,6 @@
 			<th>MOTIVO</th>
 
 		</tr>
-		<%
-			List<Log_Sensor> lista = (List<Log_Sensor>) request.getAttribute("listlg");
-		%>
 
 		<%
 			for (Log_Sensor f : lista) {
@@ -66,6 +78,11 @@
 
 
 	</table>
+		</p>
+	</div>
+
+	<div id="footer">Copyright © tfgluizerogerio.ddns.net</div>
+	
 
 
 </body>

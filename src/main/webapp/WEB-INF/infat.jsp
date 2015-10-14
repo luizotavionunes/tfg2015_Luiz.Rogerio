@@ -4,6 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<%@
+include file="css/style.css"%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Cadastro de Faturamento</title>
@@ -100,15 +102,29 @@
 
 </head>
 <body>
+<div id="footer">
+		<h1>SISTEMA DE MONITORAMENTO EM TEMPO REAL</h1>
+	</div>
 
+	<div id="nav">
+		<%@include file="menuf.jsp"%>
+	</div>
 
-<h1> Formulário para Cadastro de Faturamento </h1>
-	<form action="fatinf.do" method="post">
-		Data de entrada:   <input type="text" name="data" OnKeyUp="mascara_data(this.value)" maxlength="10"> dd/mm/aaaa<br> 
+	<div id="section">
+				<h2>Cadastrar Faturamento</h2>
+		<p>	<form action="fatinf.do" method="post">
+		Data de entrada: <input type="text" name="data" OnKeyUp="mascara_data(this.value)" maxlength="10"> dd/mm/aaaa<br> 
 	 	Hora de entrada: <input type="text" name="hora" OnKeyUp="mascara_hora(this.value)" maxlength="5"> hh:mm<br> 
 		Valor: <input type="text" name="valor_informado" /><br /> 
 		<input	type="submit" value="Salvar" onclick="return confirm('Deseja confirmar o faturamento?')">
-	</form>
+	</form></p>
+	</div>
+
+	<div id="footer">Copyright © tfgluizerogerio.ddns.net</div>
 
 </body>
 </html>
+
+
+
+

@@ -22,7 +22,7 @@ public class TestFaturamentoDAO {
 		
 
 	}
-	
+	/*
 	public static void cadastro(){
 		Date data = null;
 		
@@ -89,5 +89,5 @@ public class TestFaturamentoDAO {
 			System.out.println(ft);
 		}
 	}
-
+*/
 }
